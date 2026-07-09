@@ -662,6 +662,14 @@ condense the deck versions above with no new facts. Structural note: the
 `support` band merged into the bench grid (Jacob Mirandette, field
 "Operations Support").
 
+### About bench: first names only (owner request, 2026-07-09)
+
+The owner asked to drop last names for everyone on the About page except
+Zach Booker. Bench cards (and Jacob in Operations Support) now show first
+names only ("Ben", "Philip", "Michael", "Andy", "Mike", "Mya", "Andrew",
+"Jacob") in `src/components/sections/about/content.ts`. Bios and headshot
+paths are unchanged.
+
 ### Plan 006: /book application form + tier panel copy (owner-approved 2026-07-09)
 
 Plan 006 gates the booking calendar behind a multi-step application
