@@ -24,9 +24,14 @@ export type RevenueRange =
   | "undisclosed";
 export type ContactMethod = "phone" | "email" | "text";
 
-/** The full application answer set, as validated server-side. */
+/**
+ * The scored application answer set, as validated server-side. Contact
+ * details are deliberately NOT part of the application: they're collected
+ * after the tier is known (qualified leads give them to the booking
+ * calendar, which feeds the CRM directly; borderline and no-fit leads
+ * give them to the internal contact form). See ContactDetails.
+ */
 export interface QualificationAnswers {
-  name: string;
   businessName: string;
   ownership: Ownership;
   industry: string;
@@ -36,11 +41,20 @@ export interface QualificationAnswers {
   /** Open text, required. Substance is judged by the operator; length is
    * only a scoring proxy (see config.points.whyNow). */
   whyNow: string;
+  /** Optional on the form; a skipped answer normalizes to "undisclosed". */
+  revenueRange: RevenueRange;
+}
+
+/**
+ * Personal contact details, collected post-tier by the internal contact
+ * form (tier 2 follow-up and the tier 3 "I'm stuck" path) and sent to
+ * POST /api/lead-contact alongside the application echo.
+ */
+export interface ContactDetails {
+  name: string;
   email: string;
   phone: string;
   contactMethod: ContactMethod;
-  /** Optional on the form; a skipped answer normalizes to "undisclosed". */
-  revenueRange: RevenueRange;
 }
 
 const OWNERSHIP_VALUES: readonly Ownership[] = ["owner", "partner", "researcher"];
@@ -88,21 +102,16 @@ export function parseQualificationAnswers(input: unknown): QualificationAnswers 
   if (input === null || typeof input !== "object") return null;
   const record = input as Record<string, unknown>;
 
-  const name = shortText(record.name);
   const businessName = shortText(record.businessName);
   const industry = shortText(record.industry);
   const whyNow = longText(record.whyNow);
-  const email = shortText(record.email);
-  const phone = shortText(record.phone);
 
-  if (!name || !businessName || !industry || !whyNow || !email || !phone) return null;
-  if (!email.includes("@")) return null;
+  if (!businessName || !industry || !whyNow) return null;
 
   if (!isOneOf(record.ownership, OWNERSHIP_VALUES)) return null;
   if (!isOneOf(record.yearsOwned, YEARS_OWNED_VALUES)) return null;
   if (!isOneOf(record.employees, EMPLOYEES_VALUES)) return null;
   if (!isOneOf(record.journey, JOURNEY_VALUES)) return null;
-  if (!isOneOf(record.contactMethod, CONTACT_METHOD_VALUES)) return null;
 
   // Revenue range is optional on the form; missing or empty means the
   // applicant skipped it, which scores as "undisclosed".
@@ -113,7 +122,6 @@ export function parseQualificationAnswers(input: unknown): QualificationAnswers 
   }
 
   return {
-    name,
     businessName,
     ownership: record.ownership,
     industry,
@@ -121,9 +129,25 @@ export function parseQualificationAnswers(input: unknown): QualificationAnswers 
     employees: record.employees,
     journey: record.journey,
     whyNow,
-    email,
-    phone,
-    contactMethod: record.contactMethod,
     revenueRange,
   };
+}
+
+/**
+ * Validates an unknown payload into a ContactDetails object. Returns null
+ * on any invalid or missing field.
+ */
+export function parseContactDetails(input: unknown): ContactDetails | null {
+  if (input === null || typeof input !== "object") return null;
+  const record = input as Record<string, unknown>;
+
+  const name = shortText(record.name);
+  const email = shortText(record.email);
+  const phone = shortText(record.phone);
+
+  if (!name || !email || !phone) return null;
+  if (!email.includes("@")) return null;
+  if (!isOneOf(record.contactMethod, CONTACT_METHOD_VALUES)) return null;
+
+  return { name, email, phone, contactMethod: record.contactMethod };
 }

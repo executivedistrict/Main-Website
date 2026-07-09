@@ -1,17 +1,26 @@
 import { checkRateLimit } from "@/lib/rate-limit";
 import { isResendConfigured, sendLeadEmail } from "@/lib/email/resend";
-import { applicationRows, renderLeadEmail } from "@/lib/email/template";
+import {
+  applicationRows,
+  contactRows,
+  renderLeadEmail,
+} from "@/lib/email/template";
 import { qualificationConfig } from "@/lib/qualification/config";
-import { parseQualificationAnswers } from "@/lib/qualification/types";
+import {
+  parseContactDetails,
+  parseQualificationAnswers,
+} from "@/lib/qualification/types";
 
 /**
  * POST /api/lead-contact
  *
- * Tier-2 (borderline) follow-up: the applicant leaves a message so a
- * senior operator can reach out personally. Body:
- * { message, preferredTimes?, application } where `application` is the
- * original answers echo held in client state. Sends the branded
- * `[Lead follow-up]` email to the internal contact and returns
+ * Post-tier follow-up: tier 2 (borderline, an operator reaches out) and
+ * tier 3 (no-fit, the applicant asked for help with a bottleneck). This
+ * is where contact details are collected; the scored application carries
+ * none. Body: { message, preferredTimes?, tier, contact, application }
+ * where `application` is the original answers echo held in client state
+ * and `contact` is { name, email, phone, contactMethod }. Sends the
+ * branded `[Lead follow-up]` email to the internal contact and returns
  * { ok: true }.
  *
  * Errors (generic messages; specifics logged server-side only):
@@ -25,6 +34,25 @@ export const dynamic = "force-dynamic";
 
 const MESSAGE_MAX = 5000;
 const PREFERRED_TIMES_MAX = 500;
+
+/** Tiers this route accepts; qualified leads never reach it. */
+const FOLLOW_UP_TIERS = {
+  borderline: {
+    label: "Borderline",
+    intro: "A borderline applicant left a message.",
+  },
+  "no-fit": {
+    label: "No fit",
+    intro:
+      "A no-fit applicant says they're stuck on a bottleneck and asked for help.",
+  },
+} as const;
+
+type FollowUpTier = keyof typeof FOLLOW_UP_TIERS;
+
+function isFollowUpTier(value: unknown): value is FollowUpTier {
+  return typeof value === "string" && value in FOLLOW_UP_TIERS;
+}
 
 export async function POST(request: Request): Promise<Response> {
   // Rate limiting keyed by client IP (first x-forwarded-for hop),
@@ -67,6 +95,16 @@ export async function POST(request: Request): Promise<Response> {
     preferredTimes = trimmed || undefined;
   }
 
+  if (!isFollowUpTier(record.tier)) {
+    return Response.json({ error: "Invalid request." }, { status: 400 });
+  }
+  const tier = FOLLOW_UP_TIERS[record.tier];
+
+  const contact = parseContactDetails(record.contact);
+  if (!contact) {
+    return Response.json({ error: "Invalid request." }, { status: 400 });
+  }
+
   const answers = parseQualificationAnswers(record.application);
   if (!answers) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
@@ -83,14 +121,14 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const rows = applicationRows(answers);
+  const rows = [...contactRows(contact), ...applicationRows(answers)];
   if (preferredTimes) {
     rows.push({ label: "Preferred times", value: preferredTimes });
   }
 
   const html = renderLeadEmail({
     title: "Lead follow-up",
-    intro: `A borderline applicant left a message. Submitted ${new Date().toISOString()}.`,
+    intro: `${tier.intro} Submitted ${new Date().toISOString()}.`,
     rows,
     blocks: [
       { label: "Their message", text: message },
@@ -101,7 +139,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     await sendLeadEmail({
       to: qualificationConfig.notifications.internalContact,
-      subject: `[Lead follow-up] ${answers.businessName}`,
+      subject: `[Lead follow-up: ${tier.label}] ${answers.businessName}`,
       html,
     });
   } catch (error) {
