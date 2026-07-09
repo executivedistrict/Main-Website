@@ -1,0 +1,31 @@
+{
+  "name": "@executive-district/jacob-concierge",
+  "version": "2.0.0",
+  "description": "Secure, production-ready Jacob AI Concierge widget powered by Tavus — drop into any React site",
+  "main": "JacobTavusWidget.jsx",
+  "type": "module",
+  "files": [
+    "JacobTavusWidget.jsx",
+    "server.js",
+    "env.example.txt",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "axios": "^1.6.0"
+  },
+  "keywords": [
+    "tavus",
+    "ai-concierge",
+    "executive-district",
+    "react-widget",
+    "conversational-ai",
+    "video-chat"
+  ],
+  "license": "UNLICENSED",
+  "private": true
+}

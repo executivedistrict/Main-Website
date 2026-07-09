@@ -1,0 +1,13 @@
+# pnpm settings (pnpm 11+ reads build/peer config from here, not package.json).
+# Allow the native postinstall builds these packages need.
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+
+# ESLint is held at the latest 9.x: ESLint 10 removed context.getFilename(),
+# which eslint-config-next's bundled eslint-plugin-react@7.37.5 still calls, so
+# ESLint 10 breaks `next lint`. Revisit when that plugin ships ESLint 10 support.
+
+# pnpm auto-excluded this from its minimum-release-age gate during upgrade.
+minimumReleaseAgeExclude:
+  - '@types/node@25.9.3'

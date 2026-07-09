@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* ============================================================
+   EXECUTIVE DISTRICT - DESIGN TOKENS
+   Tailwind v4 CSS-first theme. Mirrors the production site
+   (docs/Original Site HTML). Light surfaces, navy + blue with a
+   gold accent. Inter (all UI/headlines) / Lora (italic serif
+   accents inside headlines only).
+   ============================================================ */
+
+@theme {
+  /* fonts - variables are injected by next/font in layout.tsx */
+  --font-sans: var(--font-inter), "Inter", Arial, system-ui, sans-serif;
+  --font-serif: var(--font-lora), "Lora", Georgia, serif;
+
+  /* brand palette - matches the production site's :root variables */
+  --color-navy: #0f1f3d; /* dark surfaces, headlines */
+  --color-blue: #2e75b6; /* primary action color */
+  --color-blue-deep: #245f96; /* button hover */
+  --color-gold: #c8973e; /* accent: eyebrows, italics, dividers */
+  --color-charcoal: #333333; /* body text on light surfaces */
+  --color-slate: #2c3e5a; /* secondary text, subheads */
+  --color-ice: #eaf0f7; /* tinted callout/panel background */
+  --color-mist: #f7f8fa; /* alternate light section background */
+  --color-line: #e2e5ea; /* hairlines and borders on light */
+
+  /* muted supporting hues - category chips only (e.g. About field tags),
+     never for actions or accents. Text colors tuned to pass AA on their
+     10-15% tint backgrounds. */
+  --color-gold-deep: #7a5a20;
+  --color-sage: #3e6b4f;
+  --color-plum: #5d4a6b;
+
+  /* text on navy surfaces (white at graded opacities) */
+  --color-frost: rgba(255, 255, 255, 0.85);
+  --color-frost-soft: rgba(255, 255, 255, 0.7);
+  --color-frost-faint: rgba(255, 255, 255, 0.55);
+  --color-line-onnavy: rgba(255, 255, 255, 0.1);
+
+  /* radius - buttons/cards use small radii throughout */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* elevation - soft, navy-tinted shadows on light surfaces */
+  --shadow-e1: 0 2px 20px rgba(15, 31, 61, 0.08);
+  --shadow-e2: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-e3: 0 20px 50px rgba(15, 31, 61, 0.12);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-charcoal);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-sans);
+    color: var(--color-navy);
+    font-weight: 700;
+  }
+
+  /* serif italic accent inside headlines - the signature brand flourish */
+  h1 em,
+  h2 em,
+  h3 em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-gold);
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* headline utilities - clamp scales lifted from the production CSS */
+@utility display-xl {
+  font-weight: 700;
+  font-size: clamp(36px, 4.5vw, 52px);
+  line-height: 1.1;
+}
+
+@utility display-l {
+  font-weight: 700;
+  font-size: clamp(30px, 3.5vw, 40px);
+  line-height: 1.15;
+}
+
+@utility display-m {
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 32px);
+  line-height: 1.2;
+}
+
+/* uppercase letter-spaced label (eyebrow) - gold on any surface */
+@utility eyebrow-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}

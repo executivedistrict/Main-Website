@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Executive District - Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,400;1,600&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   EXECUTIVE DISTRICT - DESIGN SYSTEM (v1.0)
+   Light. Navy + blue with a gold accent. Inter everywhere;
+   Lora italic only as the serif accent inside headlines.
+   1:1 recreation of the production site (docs/Original Site HTML).
+   Live Tailwind tokens: src/app/globals.css (@theme).
+   Primitives: src/components/ui/.
+   ============================================================ */
+
+:root {
+  /* - brand palette (matches production :root) - */
+  --navy:     #0F1F3D;  /* dark surfaces, headlines            */
+  --blue:     #2E75B6;  /* primary action color                */
+  --blue-deep:#245F96;  /* button hover                        */
+  --gold:     #C8973E;  /* accent: eyebrows, italics, dividers */
+  --charcoal: #333333;  /* body text on light surfaces         */
+  --slate:    #2C3E5A;  /* secondary text, subheads            */
+  --ice:      #EAF0F7;  /* tinted callout / panel background   */
+  --mist:     #F7F8FA;  /* alternate light section background  */
+  --line:     #E2E5EA;  /* hairlines and borders on light      */
+  --white:    #FFFFFF;
+
+  /* - text on navy surfaces (white at graded opacities) - */
+  --frost:       rgba(255,255,255,.85);
+  --frost-soft:  rgba(255,255,255,.70);
+  --frost-faint: rgba(255,255,255,.55);
+  --line-onnavy: rgba(255,255,255,.10);
+
+  /* - radius - */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* - elevation - */
+  --shadow-e1: 0 2px 20px rgba(15,31,61,.08);
+  --shadow-e2: 0 8px 24px rgba(0,0,0,.08);
+  --shadow-e3: 0 20px 50px rgba(15,31,61,.12);
+
+  --font-sans:  "Inter", Arial, system-ui, sans-serif;
+  --font-serif: "Lora", Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--charcoal);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-sans); color: var(--navy); font-weight: 700; }
+/* Signature flourish: em inside a headline renders Lora italic gold. */
+h1 em, h2 em, h3 em { font-family: var(--font-serif); font-style: italic; color: var(--gold); }
+
+/* - type scale utilities (clamps lifted from production CSS) - */
+.display-xl { font-weight: 700; font-size: clamp(36px, 4.5vw, 52px); line-height: 1.1; }
+.display-l  { font-weight: 700; font-size: clamp(30px, 3.5vw, 40px); line-height: 1.15; }
+.display-m  { font-weight: 700; font-size: clamp(24px, 2.6vw, 32px); line-height: 1.2; }
+.eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+}
+
+/* ---------- spec-sheet chrome (not part of the system) ---------- */
+.spec { max-width: 1200px; margin: 0 auto; padding: 64px 32px; }
+.spec + .spec { border-top: 1px solid var(--line); }
+.spec > h2 { font-size: 22px; margin-bottom: 6px; }
+.spec-note { font-size: 14px; color: var(--slate); max-width: 720px; margin-bottom: 32px; }
+.row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.stack { display: grid; gap: 24px; }
+code { font-family: ui-monospace, Menlo, monospace; font-size: 12px; background: var(--mist); border: 1px solid var(--line); border-radius: var(--radius-xs); padding: 1px 5px; color: var(--slate); }
+
+/* swatches */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+.swatch { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: var(--white); }
+.swatch-chip { height: 72px; }
+.swatch-meta { padding: 12px 14px; font-size: 12px; line-height: 1.5; }
+.swatch-meta strong { display: block; color: var(--navy); font-size: 13px; }
+.swatch-meta span { color: var(--slate); }
+
+/* ---------- documented patterns ---------- */
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-weight: 600; text-decoration: none; border: 0; cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 16px 36px; font-size: 15px; letter-spacing: .3px;
+  transition: background .2s, transform .15s, box-shadow .2s, color .2s, border-color .2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--blue); color: var(--white); }
+.btn-primary:hover { background: var(--blue-deep); box-shadow: 0 4px 16px rgba(46,117,182,.3); }
+.btn-gold { background: var(--gold); color: var(--navy); }         /* navy CTA bands only */
+.btn-outline { background: transparent; border: 1px solid var(--line); color: var(--slate); }
+.btn-outline:hover { border-color: var(--slate); color: var(--navy); }
+.btn-sm { padding: 10px 22px; font-size: 13px; letter-spacing: .5px; }
+
+/* Cards */
+.card {
+  position: relative; background: var(--white); border: 1px solid var(--line);
+  border-radius: var(--radius-md); padding: 32px; max-width: 340px;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-e2); }
+.card h3 { font-size: 20px; margin-bottom: 10px; }
+.card p { font-size: 14px; line-height: 1.7; color: var(--slate); }
+.card.featured::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold); border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* Numbered process step (home "How it works") */
+.process-step {
+  background: var(--mist); border-top: 3px solid var(--gold);
+  border-radius: var(--radius-xs); padding: 32px 24px; max-width: 280px;
+}
+.step-num { font-family: var(--font-serif); font-style: italic; font-size: 48px; font-weight: 600; color: var(--ice); line-height: 1; margin-bottom: 16px; }
+.step-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.step-desc { font-size: 14px; line-height: 1.7; color: var(--slate); }
+
+/* Stats */
+.stat-value { font-size: clamp(28px, 3vw, 36px); font-weight: 700; color: var(--gold); line-height: 1; }
+.stat-label { margin-top: 12px; font-weight: 500; color: var(--navy); }
+.stat-source { margin-top: 6px; font-size: 13px; color: var(--slate); }
+.on-navy .stat-label { color: var(--frost); }
+.on-navy .stat-source { color: var(--frost-faint); }
+
+/* Section tones */
+.tone { padding: 40px 32px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.tone h3 { font-size: 16px; margin-bottom: 6px; }
+.tone p { font-size: 13px; color: var(--slate); }
+.tone-mist { background: var(--mist); }
+.tone-ice { background: var(--ice); }
+.tone-navy { background: var(--navy); border-color: var(--navy); }
+.tone-navy h3 { color: var(--white); }
+.tone-navy p { color: var(--frost-soft); }
+
+/* Nav pattern */
+.demo-nav { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--white); }
+.demo-nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-weight: 700; font-size: 14px; letter-spacing: 3px; color: var(--navy); text-transform: uppercase; text-decoration: none; line-height: 1.2; }
+.logo span { display: block; }
+.demo-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.demo-links a { font-size: 14px; font-weight: 500; color: var(--slate); text-decoration: none; letter-spacing: .3px; }
+.demo-links a:hover { color: var(--navy); }
+
+/* Footer pattern */
+.demo-footer { background: var(--navy); border-radius: var(--radius-sm); padding: 48px 32px 24px; }
+.demo-footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--line-onnavy); }
+.demo-footer .logo { color: var(--white); }
+.footer-tagline { font-size: 14px; color: var(--frost-faint); margin-top: 12px; }
+.footer-heading { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.footer-links { list-style: none; display: grid; gap: 10px; }
+.footer-links a { font-size: 14px; color: var(--frost-soft); text-decoration: none; }
+.footer-links a:hover { color: var(--white); }
+.footer-bottom { padding-top: 20px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.35); flex-wrap: wrap; gap: 8px; }
+
+/* Legal prose patterns */
+.legal-divider { width: 60px; height: 3px; background: var(--gold); border: 0; margin: 24px 0; }
+.legal-callout {
+  background: var(--ice); border-left: 4px solid var(--blue);
+  padding: 20px 24px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; max-width: 620px;
+}
+.legal-callout p { font-size: 14px; line-height: 1.7; color: var(--slate); }
+.callout-gold {
+  background: var(--ice); border-left: 4px solid var(--gold);
+  padding: 24px 28px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; max-width: 620px;
+}
+.callout-gold p { font-family: var(--font-serif); font-style: italic; font-size: 16px; line-height: 1.7; color: var(--navy); }
+
+/* radius + shadow chips */
+.chip { width: 120px; height: 72px; background: var(--white); border: 1px solid var(--line); display: grid; place-items: center; font-size: 12px; color: var(--slate); }
+
+@media (max-width: 968px) {
+  .demo-footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .demo-links { display: none; }
+}
+@media (max-width: 600px) {
+  .spec { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="spec">
+  <p class="eyebrow" style="margin-bottom:14px">Design System</p>
+  <h1 class="display-l">Executive District <em>visual reference</em></h1>
+  <p class="spec-note" style="margin-top:14px">
+    Light system recreated 1:1 from the production site (snapshots in
+    <code>docs/Original Site HTML/</code>). White pages, navy anchor surfaces,
+    blue for every primary action, gold strictly as an accent. Inter for all
+    text; Lora italic appears only inside headlines via <code>&lt;em&gt;</code>
+    and in a few serif flourishes (step numbers, pull quotes). Live tokens:
+    <code>src/app/globals.css</code>. Primitives: <code>src/components/ui/</code>.
+  </p>
+</header>
+
+<section class="spec">
+  <h2>Palette</h2>
+  <p class="spec-note">Token names are the Tailwind color names from <code>@theme</code> (use <code>bg-navy</code>, <code>text-slate</code>, <code>border-line</code>, never hex in JSX).</p>
+  <div class="swatches">
+    <div class="swatch"><div class="swatch-chip" style="background:#0F1F3D"></div><div class="swatch-meta"><strong>navy</strong> #0F1F3D<br /><span>Dark sections, footer, headlines on light.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#2E75B6"></div><div class="swatch-meta"><strong>blue</strong> #2E75B6<br /><span>The primary action color: buttons, links, callout rules.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#245F96"></div><div class="swatch-meta"><strong>blue-deep</strong> #245F96<br /><span>Blue button hover state.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#C8973E"></div><div class="swatch-meta"><strong>gold</strong> #C8973E<br /><span>Accent only: eyebrows, headline italics, dividers, stat figures, featured rules. Never a page-level primary button on light.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#333333"></div><div class="swatch-meta"><strong>charcoal</strong> #333333<br /><span>Body text on light surfaces.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#2C3E5A"></div><div class="swatch-meta"><strong>slate</strong> #2C3E5A<br /><span>Secondary text, subheads, nav links, card body copy.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#EAF0F7"></div><div class="swatch-meta"><strong>ice</strong> #EAF0F7<br /><span>Tinted callouts, metric bands, oversized serif numerals.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#F7F8FA"></div><div class="swatch-meta"><strong>mist</strong> #F7F8FA<br /><span>Alternate light section background, process steps.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#E2E5EA"></div><div class="swatch-meta"><strong>line</strong> #E2E5EA<br /><span>Hairlines and borders on light surfaces.</span></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#0F1F3D;display:grid;place-items:center"><span style="color:rgba(255,255,255,.85);font-size:13px">frost / soft / faint</span></div><div class="swatch-meta"><strong>frost, frost-soft, frost-faint</strong> white 85 / 70 / 55%<br /><span>Text on navy. Hairlines on navy: <strong>line-onnavy</strong> (white 10%).</span></div></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Typography</h2>
+  <p class="spec-note">Inter carries everything: headlines, body, UI, the uppercase wordmark. Lora italic exists only for accents. An <code>&lt;em&gt;</code> inside an h1/h2/h3 renders Lora italic gold automatically (base CSS); reproduce the production placement exactly.</p>
+  <div class="stack">
+    <div><h1 class="display-xl">Display XL <em>with accent</em></h1><code>.display-xl - clamp(36px, 4.5vw, 52px) / 1.1 / 700 - page heroes</code></div>
+    <div><h2 class="display-l">Display L <em>with accent</em></h2><code>.display-l - clamp(30px, 3.5vw, 40px) / 1.15 / 700 - major section heads</code></div>
+    <div><h2 class="display-m">Display M</h2><code>.display-m - clamp(24px, 2.6vw, 32px) / 1.2 / 700 - section headers</code></div>
+    <div><p class="eyebrow">Eyebrow label</p><code>.eyebrow-label - 11px / 600 / 4px tracking / uppercase / gold - on any surface</code></div>
+    <div><p style="font-size:17px;line-height:1.7;color:var(--slate);max-width:620px">Lead paragraph: 17px slate, line-height 1.7. Used for hero subs and section descriptions.</p></div>
+    <div><p style="max-width:620px">Body: 15-16px charcoal, line-height 1.6-1.8. Long-form legal prose uses 15px / 1.8.</p></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Buttons</h2>
+  <p class="spec-note">Blue is the primary action everywhere on light surfaces. The gold button appears only on navy CTA bands. Radius 4px, weight 600, subtle lift on hover.</p>
+  <div class="row">
+    <a class="btn btn-primary" href="#">Book a Confidential Call</a>
+    <a class="btn btn-outline" href="#">Secondary</a>
+    <a class="btn btn-primary btn-sm" href="#">Nav CTA (sm)</a>
+  </div>
+  <div class="tone tone-navy" style="margin-top:24px;max-width:480px">
+    <h3>On navy</h3>
+    <p style="margin-bottom:16px">Gold variant, navy text.</p>
+    <a class="btn btn-gold" href="#">Book a Call</a>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Cards, steps, stats</h2>
+  <p class="spec-note">Cards are white with a line border, radius 8px, lift + shadow on hover; <code>featured</code> adds a 3px gold top rule. Process steps sit on mist with a gold top border and an oversized Lora numeral in ice. Stats are gold figures over navy labels (frost on navy), always paired with a claims disclaimer.</p>
+  <div class="row" style="align-items:stretch">
+    <div class="card"><h3>Standard card</h3><p>White surface, hairline border, soft e2 shadow on hover.</p></div>
+    <div class="card featured"><h3>Featured card</h3><p>Gold top rule for the one card that stands apart.</p></div>
+    <div class="process-step"><div class="step-num">01</div><div class="step-title">Process step</div><div class="step-desc">Mist panel, 3px gold top border, ice serif numeral.</div></div>
+    <div style="padding:24px 8px"><div class="stat-value">$480K</div><div class="stat-label">Annual profit increase</div><div class="stat-source">Self-reported client claim</div></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Section tones</h2>
+  <p class="spec-note">Pages alternate white, mist, ice, and navy bands (<code>Section tone="white | mist | ice | navy"</code>). Ice metric bands add top and bottom line borders. Navy sections use white headlines and frost body text.</p>
+  <div class="stack" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <div class="tone"><h3>white</h3><p>Default page surface.</p></div>
+    <div class="tone tone-mist"><h3>mist</h3><p>Alternate section.</p></div>
+    <div class="tone tone-ice"><h3>ice</h3><p>Metric bands, callouts.</p></div>
+    <div class="tone tone-navy"><h3>navy</h3><p>Anchor and CTA sections.</p></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Navigation</h2>
+  <p class="spec-note">Fixed 72px white bar, hairline bottom border, e1 shadow after scroll. Two-line uppercase wordmark, four flat slate links, one small blue CTA. Under 968px (repo: <code>md</code>) the links collapse behind a hamburger into a white dropdown panel.</p>
+  <div class="demo-nav"><div class="demo-nav-inner">
+    <a class="logo" href="#"><span>Executive</span><span>District</span></a>
+    <ul class="demo-links">
+      <li><a href="#">Home</a></li><li><a href="#">How We Work</a></li>
+      <li><a href="#">About</a></li><li><a href="#">Results</a></li>
+      <li><a class="btn btn-primary btn-sm" href="#" style="color:#fff">Book a Call</a></li>
+    </ul>
+  </div></div>
+</section>
+
+<section class="spec">
+  <h2>Footer</h2>
+  <p class="spec-note">Navy, three columns (brand + tagline / Navigate / Connect) with gold uppercase column headings, a line-onnavy divider, and a dim legal bottom row. Collapses to one column under 968px.</p>
+  <div class="demo-footer">
+    <div class="demo-footer-grid">
+      <div><a class="logo" href="#"><span>Executive</span><span>District</span></a><p class="footer-tagline">Fractional C-Suite Services<br />for $500K&ndash;$50M Business Owners</p></div>
+      <div><p class="footer-heading">Navigate</p><ul class="footer-links"><li><a href="#">Home</a></li><li><a href="#">How We Work</a></li><li><a href="#">About</a></li><li><a href="#">Results</a></li><li><a href="#">Book a Call</a></li></ul></div>
+      <div><p class="footer-heading">Connect</p><ul class="footer-links"><li><a href="#">LinkedIn</a></li><li><a href="#">Hello@executivedistrict.com</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; Executive District. All rights reserved.</span><span><a href="#" style="color:inherit">Privacy Policy</a> &middot; <a href="#" style="color:inherit">Terms &amp; Conditions</a></span></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Legal and prose patterns</h2>
+  <p class="spec-note">Legal pages: navy hero (gold eyebrow, white display-l h1), then an 800px prose column. h2 22px navy, h3 17px slate 600, body 15px / 1.8. Links are blue, underline on hover.</p>
+  <div class="stack">
+    <div><hr class="legal-divider" /><code>.legal-divider - 60 x 3px gold rule between major legal sections</code></div>
+    <div class="legal-callout"><p>Ice callout with a 4px blue left rule: notices and effective-date blocks inside legal prose.</p></div>
+    <div class="callout-gold"><p>Gold-rule variant: Lora italic navy pull quote, used for editorial emphasis in narrative sections.</p></div>
+  </div>
+</section>
+
+<section class="spec">
+  <h2>Spacing, radius, elevation</h2>
+  <p class="spec-note">Container max-width 1200px. Desktop sections: 100px vertical / 32px horizontal padding (repo: <code>py-16 sm:py-24, px-5 sm:px-8</code>); heroes pad 140-160px top to clear the fixed 72px nav. Mobile trims to 56px / 20px.</p>
+  <div class="row">
+    <div class="chip" style="border-radius:2px">xs 2px</div>
+    <div class="chip" style="border-radius:4px">sm 4px</div>
+    <div class="chip" style="border-radius:8px">md 8px</div>
+    <div class="chip" style="border-radius:12px">lg 12px</div>
+  </div>
+  <div class="row" style="margin-top:24px">
+    <div class="chip" style="border:0;box-shadow:var(--shadow-e1)">e1 nav scroll</div>
+    <div class="chip" style="border:0;box-shadow:var(--shadow-e2)">e2 card hover</div>
+    <div class="chip" style="border:0;box-shadow:var(--shadow-e3)">e3 modals</div>
+  </div>
+</section>
+
+</body>
+</html>
