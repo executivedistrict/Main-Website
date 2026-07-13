@@ -41,5 +41,5 @@ export const qualificationConfig = {
   // Where every application and follow-up notification is sent. Edit the
   // address here; the sender address is hard-coded in
   // src/lib/email/resend.ts (the authorized sender for the API key).
-  notifications: { internalContact: "corey@workwithcoba.com" },
+  notifications: { internalContact: "hello@executivedistrict.com" },
 } as const;
