@@ -15,7 +15,7 @@ const RESEND_ENDPOINT = "https://api.resend.com/emails";
 const SEND_TIMEOUT_MS = 15000;
 
 /** The verified sender for all site email, authorized for the API key. */
-const FROM_EMAIL = "Website <notifications@workwithcoba.com>";
+const FROM_EMAIL = "Website <alerts@executivedistrict.com>";
 
 export interface LeadEmailInput {
   to: string;
