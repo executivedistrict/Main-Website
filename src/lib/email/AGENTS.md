@@ -10,7 +10,7 @@ Read [`src/lib/AGENTS.md`](../AGENTS.md) first; contracts in
   `isResendConfigured()`. A plain fetch POST to
   `https://api.resend.com/emails`; deliberately no Resend SDK. Server-only.
   Env: `RESEND_API_KEY` only. The FROM address is hard-coded in
-  `resend.ts` (`Website <notifications@workwithcoba.com>`, the authorized
+  `resend.ts` (`Website <alerts@executivedistrict.com>`, the authorized
   sender for the key; owner decision, not configuration). The recipient is
   `notifications.internalContact` in `src/lib/qualification/config.ts`,
   not env.
