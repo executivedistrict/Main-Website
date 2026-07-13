@@ -5,9 +5,21 @@ import { BOOKING_CALENDAR_URL, calendarCard } from "./content";
  * Right column of the booking section: the calendar card with its navy
  * header, the embedded GHL booking calendar, and the confidentiality
  * footer. Ordered first on mobile (production `order: -1`) and sticky
- * below the fixed header on desktop.
+ * below the fixed header on desktop. `prefill` entries are appended to
+ * the iframe URL as query parameters; the GHL widget prefills any form
+ * field whose key matches (see the tier-qualified panel, which passes
+ * the application's business context).
  */
-export function BookingCalendar() {
+export function BookingCalendar({
+  prefill,
+}: {
+  prefill?: Record<string, string>;
+}) {
+  const src =
+    prefill && Object.keys(prefill).length > 0
+      ? `${BOOKING_CALENDAR_URL}?${new URLSearchParams(prefill).toString()}`
+      : BOOKING_CALENDAR_URL;
+
   return (
     <div className="order-first lg:order-none lg:sticky lg:top-[104px]">
       <div className="overflow-hidden rounded-none border-line bg-mist sm:rounded-md sm:border">
@@ -19,7 +31,7 @@ export function BookingCalendar() {
         </div>
         <div className="flex min-h-[480px] flex-col items-center justify-center px-4 py-8 sm:px-7">
           <iframe
-            src={BOOKING_CALENDAR_URL}
+            src={src}
             title="Booking calendar: schedule a confidential 30-minute discovery call"
             loading="lazy"
             className="block h-[776px] min-h-[600px] w-full border-0"

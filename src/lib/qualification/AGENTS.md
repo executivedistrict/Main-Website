@@ -8,8 +8,12 @@ the strategy in `docs/lead-qualification.md`.
 ## What lives here
 
 - `types.ts` - the `Tier`, option-value string unions,
-  `QualificationAnswers`, and `parseQualificationAnswers()` (unknown ->
-  answers or null). Client-safe on purpose: the form imports these types.
+  `QualificationAnswers` + `parseQualificationAnswers()` and
+  `ContactDetails` + `parseContactDetails()` (unknown -> parsed or null).
+  The application deliberately carries no contact details (owner decision,
+  2026-07-09); contact info is collected post-tier (booking calendar for
+  qualified, `/api/lead-contact` for the rest) and validated as
+  `ContactDetails`. Client-safe on purpose: the form imports these types.
   No rules or secrets here.
 - `config.ts` - **the one owner-editable file**: option points, hard
   gates, tier thresholds, and `notifications.internalContact` (the address

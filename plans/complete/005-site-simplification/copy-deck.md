@@ -662,6 +662,14 @@ condense the deck versions above with no new facts. Structural note: the
 `support` band merged into the bench grid (Jacob Mirandette, field
 "Operations Support").
 
+### About bench: first names only (owner request, 2026-07-09)
+
+The owner asked to drop last names for everyone on the About page except
+Zach Booker. Bench cards (and Jacob in Operations Support) now show first
+names only ("Ben", "Philip", "Michael", "Andy", "Mike", "Mya", "Andrew",
+"Jacob") in `src/components/sections/about/content.ts`. Bios and headshot
+paths are unchanged.
+
 ### Plan 006: /book application form + tier panel copy (owner-approved 2026-07-09)
 
 Plan 006 gates the booking calendar behind a multi-step application
@@ -711,3 +719,37 @@ of truth is `content.ts`):
   are still here, so please try again.", "Too many attempts in a short
   window. Give it a minute and try again.", "Please add a short message.",
   "Your message didn't go through. Nothing was lost, so please try again."
+
+### /book application: contact-info restructure + positive no-fit off-ramp (owner request, 2026-07-09)
+
+Two owner-directed changes to the plan-006 application flow:
+
+**Contact info moves out of the scored form.** The application is now two
+steps of business questions only ("You + the business" / "Where you are",
+optional revenue range last); name, email, phone, and preferred contact
+method are no longer collected before scoring. Qualified leads enter
+name/email directly in the booking-calendar iframe (which feeds the CRM),
+so nothing is collected twice and no internal notification email fires
+for the qualified tier. Borderline and no-fit leads give contact details
+on the internal contact form instead. The borderline body gained a
+sentence: "Leave your details and anything you want them to know first."
+
+**No-fit is congratulatory, with an opt-in help path.** The outright
+rejection was replaced. Approved direction: positive framing
+("congratulations on your initial success"), still discouraging
+proceeding, with a button to the internal contact form only (never the
+calendar) for owners stuck on a real bottleneck. Shipped copy
+(`tierCopy.noFit` in `src/components/sections/book/content.ts`):
+
+- Heading: "Congratulations on your initial success."
+- Body: "You've built something real. Based on your answers, you're
+  earlier in the journey than the owners we typically embed with, and a
+  fractional executive probably isn't the right investment yet. Keep
+  building; if your situation changes, we'll be here."
+- Help prompt: "That said, if you're stuck on a bottleneck you genuinely
+  need senior help with, tell us what's going on and we'll take an honest
+  look."
+- Button: "I'm stuck and need help", revealing the contact form with
+  message label "What are you stuck on?"
+- Confirmation: "Message sent." / "We'll read what you sent and respond
+  honestly, one way or the other."

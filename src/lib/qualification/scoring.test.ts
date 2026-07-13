@@ -17,7 +17,6 @@ const SHORT_WHY_NOW = "Just curious.";
 
 function answers(overrides: Partial<QualificationAnswers> = {}): QualificationAnswers {
   return {
-    name: "Pat Doe",
     businessName: "Doe Manufacturing",
     ownership: "owner",
     industry: "Manufacturing",
@@ -25,9 +24,6 @@ function answers(overrides: Partial<QualificationAnswers> = {}): QualificationAn
     employees: "11-50",
     journey: "grow",
     whyNow: LONG_WHY_NOW,
-    email: "pat@example.com",
-    phone: "616-555-0100",
-    contactMethod: "phone",
     revenueRange: "1m-5m",
     ...overrides,
   };

@@ -8,6 +8,7 @@
 // changing the config, and vice versa.
 import { Check, Clock, Lock, Star, type LucideIcon } from "lucide-react";
 import type {
+  ContactDetails,
   ContactMethod,
   Employees,
   Journey,
@@ -157,13 +158,16 @@ export type ContactMethodValue = ContactMethod;
 export type RevenueRangeValue = RevenueRange;
 
 /** The tier returned by POST /api/qualify (contract, plan 006 Phase 0). */
-export type { Tier };
+export type { ContactDetails, Tier };
 
 /**
- * The complete answer set POSTed to /api/qualify (minus the honeypot).
- * `revenueRange` is optional in the UI; an unanswered field is sent as
- * "undisclosed". Alias of the server-side QualificationAnswers so the
- * form and the API can never drift.
+ * The scored answer set POSTed to /api/qualify (minus the honeypot).
+ * Contact details are NOT collected here; qualified leads give them to
+ * the booking calendar (which feeds the CRM), everyone else to the
+ * internal contact form (POST /api/lead-contact). `revenueRange` is
+ * optional in the UI; an unanswered field is sent as "undisclosed".
+ * Alias of the server-side QualificationAnswers so the form and the API
+ * can never drift.
  */
 export type QualifyAnswers = QualificationAnswers;
 
@@ -171,9 +175,8 @@ export const qualifyCopy = {
   /** Trust-first confidentiality beat shown above the fields on every step. */
   intro:
     "A confidential conversation starts with a few questions. We work with a limited number of owners, so we make sure every call is worth your time. Nothing you share leaves this conversation.",
-  stepTitles: ["You + the business", "Where you are", "Contact"],
+  stepTitles: ["You + the business", "Where you are"],
   fields: {
-    name: { label: "Your name" },
     businessName: { label: "Business name" },
     ownership: { label: "Are you the owner?" },
     industry: { label: "What does the business do?" },
@@ -185,9 +188,6 @@ export const qualifyCopy = {
       helper:
         "One or two sentences is plenty. This goes straight to the operator you'd meet.",
     },
-    email: { label: "Email" },
-    phone: { label: "Phone" },
-    contactMethod: { label: "Preferred contact method" },
     revenueRange: {
       label: "Annual revenue range",
       helper:
@@ -212,6 +212,26 @@ export const qualifyCopy = {
   },
 } as const;
 
+/**
+ * Shared copy for the internal contact form (tier 2 follow-up and the
+ * tier 3 help path). Contact details are collected here, post-tier, not
+ * on the scored application.
+ */
+export const contactFormCopy = {
+  fields: {
+    name: { label: "Your name" },
+    email: { label: "Email" },
+    phone: { label: "Phone" },
+    contactMethod: { label: "Preferred contact method" },
+  },
+  preferredTimesLabel: "Preferred times to reach you (optional)",
+  messageRequired: "Please add a short message.",
+  submit: "Send",
+  sending: "Sending…",
+  error:
+    "Your message didn't go through. Nothing was lost, so please try again.",
+} as const;
+
 export const tierCopy = {
   qualified: {
     heading: "You're a fit. Pick a time.",
@@ -219,20 +239,21 @@ export const tierCopy = {
   },
   borderline: {
     heading: "You're a fit for a conversation.",
-    body: "A senior operator will reach out personally within one business day to find a time.",
+    body: "A senior operator will reach out personally within one business day to find a time. Leave your details and anything you want them to know first.",
     messageLabel: "Anything you want them to know first?",
-    preferredTimesLabel: "Preferred times to reach you (optional)",
-    messageRequired: "Please add a short message.",
-    submit: "Send",
-    sending: "Sending…",
-    error:
-      "Your message didn't go through. Nothing was lost, so please try again.",
     confirmationHeading: "Message sent.",
     confirmationBody:
       "A senior operator will reach out personally within one business day.",
   },
   noFit: {
-    heading: "Based on your answers, we're probably not the right partner right now.",
-    body: "We embed senior operators in established businesses, and we'd be wasting your time to pretend otherwise. If your situation changes, we'll be here.",
+    heading: "Congratulations on your initial success.",
+    body: "You've built something real. Based on your answers, you're earlier in the journey than the owners we typically embed with, and a fractional executive probably isn't the right investment yet. Keep building; if your situation changes, we'll be here.",
+    helpPrompt:
+      "That said, if you're stuck on a bottleneck you genuinely need senior help with, tell us what's going on and we'll take an honest look.",
+    helpButton: "I'm stuck and need help",
+    messageLabel: "What are you stuck on?",
+    confirmationHeading: "Message sent.",
+    confirmationBody:
+      "We'll read what you sent and respond honestly, one way or the other.",
   },
 } as const;

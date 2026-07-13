@@ -13,10 +13,12 @@ import {
  * POST /api/qualify
  *
  * Scores a lead-qualification application (plan 006) and returns ONLY
- * { tier }. The scoring rules never leave the server. Every submission,
- * all tiers, fire-and-forget emails the internal contact from the
- * qualification config; email failure (or missing Resend env) is logged
- * server-side and NEVER blocks or changes the response.
+ * { tier }. The scoring rules never leave the server. Borderline and
+ * no-fit submissions fire-and-forget an email to the internal contact
+ * from the qualification config; qualified leads get NO internal email,
+ * because they land on the booking calendar, which feeds the CRM
+ * directly. Email failure (or missing Resend env) is logged server-side
+ * and NEVER blocks or changes the response.
  *
  * Errors (generic messages; specifics logged server-side only):
  *   400 - invalid body, invalid option value, or filled honeypot
@@ -68,10 +70,13 @@ export async function POST(request: Request): Promise<Response> {
   const { tier, score } = scoreApplication(answers);
 
   // Fire-and-forget internal notification: never blocks or changes the
-  // response, even on total failure.
-  void notifyInternalContact(answers, tier, score).catch((error) => {
-    console.error("[Qualify] Failed to send lead notification email:", error);
-  });
+  // response, even on total failure. Qualified leads skip it; their
+  // booking (with contact details) lands in the CRM via the calendar.
+  if (tier !== "qualified") {
+    void notifyInternalContact(answers, tier, score).catch((error) => {
+      console.error("[Qualify] Failed to send lead notification email:", error);
+    });
+  }
 
   return Response.json({ tier });
 }

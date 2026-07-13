@@ -1,6 +1,9 @@
 import "server-only";
 
-import type { QualificationAnswers } from "@/lib/qualification/types";
+import type {
+  ContactDetails,
+  QualificationAnswers,
+} from "@/lib/qualification/types";
 
 /**
  * Branded HTML template for the internal lead-notification emails
@@ -73,20 +76,28 @@ export interface LeadEmailRow {
   value: string;
 }
 
-/** The standard answers table shared by both email kinds. */
+/** The standard answers table shared by both email kinds. The application
+ * carries no contact details; those arrive only with the follow-up form
+ * (see contactRows). */
 export function applicationRows(answers: QualificationAnswers): LeadEmailRow[] {
   return [
-    { label: "Name", value: answers.name },
     { label: "Business", value: answers.businessName },
     { label: "Ownership", value: optionLabel(answers.ownership) },
     { label: "Industry", value: answers.industry },
     { label: "Years owned", value: optionLabel(answers.yearsOwned) },
     { label: "Employees", value: optionLabel(answers.employees) },
     { label: "Journey", value: optionLabel(answers.journey) },
-    { label: "Email", value: answers.email },
-    { label: "Phone", value: answers.phone },
-    { label: "Preferred contact", value: optionLabel(answers.contactMethod) },
     { label: "Revenue range", value: optionLabel(answers.revenueRange) },
+  ];
+}
+
+/** Contact rows for the follow-up email (tier 2 and the tier 3 help path). */
+export function contactRows(contact: ContactDetails): LeadEmailRow[] {
+  return [
+    { label: "Name", value: contact.name },
+    { label: "Email", value: contact.email },
+    { label: "Phone", value: contact.phone },
+    { label: "Preferred contact", value: optionLabel(contact.contactMethod) },
   ];
 }
 

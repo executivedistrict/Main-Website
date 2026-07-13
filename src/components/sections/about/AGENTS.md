@@ -10,6 +10,8 @@ Sections for the `/about` (Our Team) page. Read
   plan-005 copy deck (`plans/complete/005-site-simplification/copy-deck.md`);
   the bench bios were shortened further by owner request (deck Amendments
   section). Edit copy only with owner approval, reflected in the deck.
+  Bench members are listed by first name only (owner request, deck
+  Amendments); only Zach Booker keeps his full name.
 - `about-hero.tsx` - navy hero ("The Team" / "Operators who've been in your
   chair.").
 - `founder-feature.tsx` - Zach Booker feature: photo + gold accent bar, label,

@@ -5,23 +5,21 @@ import { CircleAlert, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
 import {
-  contactMethodOptions,
   employeeOptions,
   journeyOptions,
   ownershipOptions,
   qualifyCopy,
   revenueRangeOptions,
   yearsOwnedOptions,
-  type ContactMethodValue,
   type EmployeesValue,
   type JourneyValue,
-  type Option,
   type OwnershipValue,
   type QualifyAnswers,
   type RevenueRangeValue,
   type Tier,
   type YearsOwnedValue,
 } from "./content";
+import { inputClasses, RadioGroup, TextField } from "./form-fields";
 import { TierBorderline } from "./tier-borderline";
 import { TierNoFit } from "./tier-no-fit";
 import { TierQualified } from "./tier-qualified";
@@ -31,7 +29,6 @@ import { TierQualified } from "./tier-qualified";
 /* ------------------------------------------------------------------ */
 
 type FormState = {
-  name: string;
   businessName: string;
   ownership: OwnershipValue | "";
   industry: string;
@@ -39,16 +36,12 @@ type FormState = {
   employees: EmployeesValue | "";
   journey: JourneyValue | "";
   whyNow: string;
-  email: string;
-  phone: string;
-  contactMethod: ContactMethodValue | "";
   revenueRange: RevenueRangeValue | "";
 };
 
 type FieldName = keyof FormState;
 
 const initialState: FormState = {
-  name: "",
   businessName: "",
   ownership: "",
   industry: "",
@@ -56,28 +49,23 @@ const initialState: FormState = {
   employees: "",
   journey: "",
   whyNow: "",
-  email: "",
-  phone: "",
-  contactMethod: "",
   revenueRange: "",
 };
 
 /** Required fields per step, in visual order (drives error focus). */
 const stepFields: FieldName[][] = [
-  ["name", "businessName", "ownership", "industry", "yearsOwned"],
+  ["businessName", "ownership", "industry", "yearsOwned"],
   ["employees", "journey", "whyNow"],
-  ["email", "phone", "contactMethod"],
 ];
+
+const lastStep = stepFields.length - 1;
 
 const radioFirstOption: Partial<Record<FieldName, string>> = {
   ownership: ownershipOptions[0].value,
   yearsOwned: yearsOwnedOptions[0].value,
   employees: employeeOptions[0].value,
   journey: journeyOptions[0].value,
-  contactMethod: contactMethodOptions[0].value,
 };
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateStep(
   step: number,
@@ -91,9 +79,6 @@ function validateStep(
         ? qualifyCopy.errors.requiredChoice
         : qualifyCopy.errors.required;
   }
-  if (step === 2 && !errors.email && !EMAIL_PATTERN.test(form.email.trim())) {
-    errors.email = qualifyCopy.errors.email;
-  }
   return errors;
 }
 
@@ -104,157 +89,15 @@ function focusField(field: FieldName) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Field building blocks                                               */
-/* ------------------------------------------------------------------ */
-
-const inputClasses =
-  "w-full rounded-sm border border-line bg-white px-4 py-3 text-[15px] text-charcoal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-1";
-
-function FieldError({ id, message }: { id: string; message: string }) {
-  return (
-    <p
-      id={id}
-      className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium text-red-700"
-    >
-      <CircleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
-      {message}
-    </p>
-  );
-}
-
-type TextFieldProps = {
-  field: FieldName;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  helper?: string;
-  type?: "text" | "email" | "tel";
-  autoComplete?: string;
-  textarea?: boolean;
-};
-
-function TextField({
-  field,
-  label,
-  value,
-  onChange,
-  error,
-  helper,
-  type = "text",
-  autoComplete,
-  textarea = false,
-}: TextFieldProps) {
-  const id = `qf-${field}`;
-  const helperId = helper ? `${id}-helper` : undefined;
-  const errorId = error ? `${id}-error` : undefined;
-  const describedBy =
-    [helperId, errorId].filter(Boolean).join(" ") || undefined;
-  const shared = {
-    id,
-    name: field,
-    value,
-    "aria-invalid": error ? true : undefined,
-    "aria-describedby": describedBy,
-    className: cn(inputClasses, error && "border-red-700"),
-  };
-
-  return (
-    <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-navy">
-        {label}
-      </label>
-      {helper && (
-        <p id={helperId} className="mb-1.5 text-[13px] leading-[1.5] text-slate">
-          {helper}
-        </p>
-      )}
-      {textarea ? (
-        <textarea
-          {...shared}
-          rows={4}
-          onChange={(event) => onChange(event.target.value)}
-        />
-      ) : (
-        <input
-          {...shared}
-          type={type}
-          autoComplete={autoComplete}
-          onChange={(event) => onChange(event.target.value)}
-        />
-      )}
-      {error && errorId && <FieldError id={errorId} message={error} />}
-    </div>
-  );
-}
-
-type RadioGroupProps<V extends string> = {
-  field: FieldName;
-  legend: string;
-  options: readonly Option<V>[];
-  value: string;
-  onChange: (value: V) => void;
-  error?: string;
-  /** Two columns from `sm` up; long labels stay single-column. */
-  columns?: boolean;
-};
-
-function RadioGroup<V extends string>({
-  field,
-  legend,
-  options,
-  value,
-  onChange,
-  error,
-  columns = false,
-}: RadioGroupProps<V>) {
-  const errorId = error ? `qf-${field}-error` : undefined;
-  return (
-    <fieldset aria-describedby={errorId}>
-      <legend className="mb-2 text-sm font-semibold text-navy">{legend}</legend>
-      <div
-        className={cn(
-          "grid grid-cols-1 gap-2",
-          columns && "sm:grid-cols-2",
-        )}
-      >
-        {options.map((option) => (
-          <label
-            key={option.value}
-            htmlFor={`qf-${field}-${option.value}`}
-            className={cn(
-              "flex cursor-pointer items-center gap-3 rounded-sm border bg-white px-4 py-3 transition-colors duration-150",
-              error ? "border-red-700" : "border-line",
-              "hover:border-slate has-[:checked]:border-blue has-[:checked]:bg-ice",
-            )}
-          >
-            <input
-              type="radio"
-              id={`qf-${field}-${option.value}`}
-              name={field}
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onChange(option.value)}
-              className="h-4 w-4 shrink-0 accent-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
-            />
-            <span className="text-[15px] leading-[1.4] text-charcoal">
-              {option.label}
-            </span>
-          </label>
-        ))}
-      </div>
-      {error && errorId && <FieldError id={errorId} message={error} />}
-    </fieldset>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* The form                                                            */
 /* ------------------------------------------------------------------ */
 
 /**
- * The gated-booking application (plan 006). Three steps with trust-first
- * sequencing, per-step validation, and a hidden honeypot. Submits to
+ * The gated-booking application (plan 006). Two steps of business
+ * questions with trust-first sequencing, per-step validation, and a
+ * hidden honeypot. No contact details are collected here: qualified
+ * leads give them to the booking calendar (which feeds the CRM), the
+ * other tiers to the contact form inside their panels. Submits to
  * POST /api/qualify; all qualification logic is server-side and this
  * component only renders the tier the server returns.
  */
@@ -298,12 +141,11 @@ export function QualifyForm() {
   }
 
   async function submit() {
-    const { ownership, yearsOwned, employees, journey, contactMethod } = form;
-    if (!ownership || !yearsOwned || !employees || !journey || !contactMethod) {
+    const { ownership, yearsOwned, employees, journey } = form;
+    if (!ownership || !yearsOwned || !employees || !journey) {
       return; // unreachable after validation; satisfies the type system
     }
     const answers: QualifyAnswers = {
-      name: form.name.trim(),
       businessName: form.businessName.trim(),
       ownership,
       industry: form.industry.trim(),
@@ -311,9 +153,6 @@ export function QualifyForm() {
       employees,
       journey,
       whyNow: form.whyNow.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      contactMethod,
       revenueRange: form.revenueRange === "" ? "undisclosed" : form.revenueRange,
     };
 
@@ -354,7 +193,7 @@ export function QualifyForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!stepIsValid()) return;
-    if (step < 2) {
+    if (step < lastStep) {
       setStep(step + 1);
     } else {
       void submit();
@@ -362,11 +201,13 @@ export function QualifyForm() {
   }
 
   if (result) {
-    if (result.tier === "qualified") return <TierQualified />;
+    if (result.tier === "qualified") {
+      return <TierQualified application={result.answers} />;
+    }
     if (result.tier === "borderline") {
       return <TierBorderline application={result.answers} />;
     }
-    return <TierNoFit />;
+    return <TierNoFit application={result.answers} />;
   }
 
   const revenueDescribedBy = "qf-revenueRange-helper";
@@ -383,7 +224,7 @@ export function QualifyForm() {
       </p>
 
       <p className="mb-2 text-[11px] font-semibold uppercase tracking-[2px] text-slate">
-        Step {step + 1} of 3
+        Step {step + 1} of {qualifyCopy.stepTitles.length}
       </p>
       <div aria-hidden="true" className="mb-6 flex gap-1.5">
         {qualifyCopy.stepTitles.map((title, index) => (
@@ -425,14 +266,6 @@ export function QualifyForm() {
 
         {step === 0 && (
           <div className="flex flex-col gap-6">
-            <TextField
-              field="name"
-              label={qualifyCopy.fields.name.label}
-              value={form.name}
-              onChange={(value) => setField("name", value)}
-              error={errors.name}
-              autoComplete="name"
-            />
             <TextField
               field="businessName"
               label={qualifyCopy.fields.businessName.label}
@@ -496,38 +329,6 @@ export function QualifyForm() {
               onChange={(value) => setField("whyNow", value)}
               error={errors.whyNow}
               textarea
-            />
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="flex flex-col gap-6">
-            <TextField
-              field="email"
-              label={qualifyCopy.fields.email.label}
-              value={form.email}
-              onChange={(value) => setField("email", value)}
-              error={errors.email}
-              type="email"
-              autoComplete="email"
-            />
-            <TextField
-              field="phone"
-              label={qualifyCopy.fields.phone.label}
-              value={form.phone}
-              onChange={(value) => setField("phone", value)}
-              error={errors.phone}
-              type="tel"
-              autoComplete="tel"
-            />
-            <RadioGroup
-              field="contactMethod"
-              legend={qualifyCopy.fields.contactMethod.label}
-              options={contactMethodOptions}
-              value={form.contactMethod}
-              onChange={(value) => setField("contactMethod", value)}
-              error={errors.contactMethod}
-              columns
             />
             <div>
               <label
@@ -593,7 +394,7 @@ export function QualifyForm() {
             <span aria-hidden="true" />
           )}
           <Button type="submit" size="md" disabled={status === "submitting"}>
-            {step < 2
+            {step < lastStep
               ? qualifyCopy.buttons.next
               : status === "submitting"
                 ? qualifyCopy.buttons.submitting
