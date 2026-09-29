@@ -14,7 +14,6 @@ const FIELD_CHIPS: Record<string, string> = {
   "Revenue & Growth": "bg-gold/15 text-gold-deep",
   "M&A Advisory & Exit Strategy": "bg-sage/10 text-sage",
   "Legal Operations & Corporate Strategy": "bg-plum/10 text-plum",
-  "Operations Support": "bg-charcoal/8 text-slate",
 };
 
 /**

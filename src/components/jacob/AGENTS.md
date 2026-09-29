@@ -17,7 +17,8 @@ Rules: tokens only (no hex), navy surface for the dialog, `"use client"` on
 both files, session created only on intentional click (never on mount).
 
 **AI Jacob is not Jacob Mirandette.** The AI concierge is its own persona
-with its own image, `public/images/ai-jacob.jpg`. Jacob Mirandette is a real
-team member on the `/about` page with his own headshot
-(`public/images/team/jacob-mirandette.png`). Never swap one image or bio for
-the other, and don't "unify" them.
+with its own image, `public/images/ai-jacob.jpg`. Jacob Mirandette was a
+real team member (Operations Coordinator) on the `/about` page until the
+owner removed him on 2026-09-29; his headshot was deleted with him. The AI
+persona's image, bio, and dialog strings were never his and stay as they
+are.

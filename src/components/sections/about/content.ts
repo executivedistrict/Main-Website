@@ -70,13 +70,6 @@ export const bench: Operator[] = [
     image: "/images/team/andrew-longcore.png",
     bio: "Andrew advises lower-middle-market companies where legal decisions directly affect enterprise value: 16+ years as lead counsel on more than 100 M&A transactions and Outside General Counsel to operating businesses.",
   },
-  {
-    name: "Jacob",
-    role: "Operations Coordinator",
-    field: "Operations Support",
-    image: "/images/team/jacob-mirandette.png",
-    bio: "Jacob works alongside our senior operators and founder teams to turn complexity into clarity, building disciplined systems across organizational restructuring and administrative operations so the senior team can focus on what matters most.",
-  },
 ];
 
 export const positioning =

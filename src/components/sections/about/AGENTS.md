@@ -34,8 +34,10 @@ Sections for the `/about` (Our Team) page. Read
 - Headshots live in `public/images/team/<kebab-name>.png`, rendered with
   `next/image`, `alt` = the person's name, grayscale with a hover
   partial-desaturation to match production.
-- Jacob Mirandette (team member) is NOT the AI concierge "Jacob"; the AI
-  persona has its own image (`public/images/ai-jacob.jpg`) and lives in
-  `src/components/jacob/`. Keep them separate.
+- The AI concierge "Jacob" (`src/components/jacob/`, image
+  `public/images/ai-jacob.jpg`) is not a team member and does not belong
+  on this page. The former Operations Coordinator, Jacob Mirandette, was
+  removed from the bench by owner request (2026-09-29); do not confuse the
+  two or re-add him because the AI persona shares the name.
 - Mobile-first: the bench grid is one column by default, two from `sm`,
   three from `lg`.

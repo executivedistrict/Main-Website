@@ -679,6 +679,17 @@ Michael Davis, from the About page. Their entries (and headshots under
 Mike, Mya, Andrew, and Jacob. Their deck sections above stay as a
 historical record only. Mike King (Fractional CMO) is unaffected.
 
+### About bench: Jacob Mirandette removed (owner request, 2026-09-29)
+
+The owner asked to remove Jacob Mirandette, Operations Coordinator, from
+the About page. His entry and headshot (`public/images/team/`) were deleted
+from `src/components/sections/about/content.ts`, and the unused
+"Operations Support" field chip was dropped from `operator-card.tsx`. The
+bench is now Ben, Andy, Mike, Mya, and Andrew. His deck section above stays
+as a historical record. This is the team member only; the AI concierge
+"Jacob" (`src/components/jacob/`) and its locked dialog strings are
+unchanged.
+
 ### Plan 006: /book application form + tier panel copy (owner-approved 2026-07-09)
 
 Plan 006 gates the booking calendar behind a multi-step application
