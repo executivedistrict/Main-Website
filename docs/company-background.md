@@ -96,8 +96,6 @@ confidential, no obligation.
   build companies without losing themselves. Faith- and service-driven.
 - **Senior operator bench** (matched to client by gaps, industry, and stage):
   - **Ben Ipema** - Fractional CFO (CPA, MBA, 20+ yrs; SaaS and tech-services exits, M&A).
-  - **Philip Johnson** - Fractional COO (hospitality, real estate, renewables, sourcing).
-  - **Michael Davis** - Fractional COO (built and exited a multi-channel retail/e-commerce business).
   - **Andy Straub** - Fractional Operator & Business Advisor (serial operator; West Michigan real estate).
   - **Mike King** - Fractional CMO (scaled 10X Health to $1M/week; CAC reduction for Grant Cardone).
   - **Mya Stone** - Fractional M&A Advisor (two exits; investment banking; Stone Capital Partners; Harvard MBA).
