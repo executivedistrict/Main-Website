@@ -670,6 +670,15 @@ names only ("Ben", "Philip", "Michael", "Andy", "Mike", "Mya", "Andrew",
 "Jacob") in `src/components/sections/about/content.ts`. Bios and headshot
 paths are unchanged.
 
+### About bench: Philip and Michael removed (owner request, 2026-09-29)
+
+The owner asked to remove the two Fractional COOs, Philip Johnson and
+Michael Davis, from the About page. Their entries (and headshots under
+`public/images/team/`) were deleted from
+`src/components/sections/about/content.ts`; the bench is now Ben, Andy,
+Mike, Mya, Andrew, and Jacob. Their deck sections above stay as a
+historical record only. Mike King (Fractional CMO) is unaffected.
+
 ### Plan 006: /book application form + tier panel copy (owner-approved 2026-07-09)
 
 Plan 006 gates the booking calendar behind a multi-step application

@@ -43,20 +43,6 @@ export const bench: Operator[] = [
     bio: "Licensed CPA and MBA with 20+ years of finance leadership. Led exits in SaaS and technology services, guided multiple acquisitions, and brings financial clarity to companies from early stage to $30M+.",
   },
   {
-    name: "Philip",
-    role: "Fractional COO",
-    field: "Operational Leadership",
-    image: "/images/team/philip-johnson.png",
-    bio: "Phil has led companies through the messy middle across hospitality, real estate development, renewable energy, and global sourcing: ground-up resort development, hospitality exits, and multi-property portfolios. Boardroom strategy, ground-level execution.",
-  },
-  {
-    name: "Michael",
-    role: "Fractional COO",
-    field: "Operational Leadership",
-    image: "/images/team/michael-davis.png",
-    bio: "Michael built an appliance side hustle into a multi-channel retail and e-commerce business with 75,000+ square feet and a team of 25, then exited. He builds operating infrastructure that scales without burnout.",
-  },
-  {
     name: "Andy",
     role: "Fractional Operator & Business Advisor",
     field: "Operational Leadership",
