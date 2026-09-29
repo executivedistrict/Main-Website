@@ -100,7 +100,6 @@ confidential, no obligation.
   - **Mike King** - Fractional CMO (scaled 10X Health to $1M/week; CAC reduction for Grant Cardone).
   - **Mya Stone** - Fractional M&A Advisor (two exits; investment banking; Stone Capital Partners; Harvard MBA).
   - **Andrew Longcore** - Fractional General Counsel (16+ yrs, 100+ M&A transactions; outside GC).
-  - **Jacob Mirandette** - Operations Coordinator (org restructuring, administrative operations).
 
 Recurring proof point: *"They've sat in the chair you're sitting in."*
 
