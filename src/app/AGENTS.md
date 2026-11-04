@@ -16,7 +16,11 @@ reproduced verbatim from the owner-approved plan-005 copy deck
   `"%s | Executive District"`), the **fonts** (Inter + Lora italic via
   `next/font`), and the **global chrome**: it renders `SiteHeader` (fixed 72px)
   + `SiteFooter` around `<main className="flex-1">` inside a `min-h-screen`
-  flex column (sticky footer). Pages render inside this `<main>` and must
+  flex column (sticky footer). Its `metadata.other` also emits the
+  **deploy marker** (`<meta name="build-commit">` / `build-time`, values
+  inlined via `env` in `next.config.ts` from Netlify's `COMMIT_REF`). The
+  client owns the Netlify account, so this is how deploys are verified from
+  the live site; keep it. Pages render inside this `<main>` and must
   **not** add their own header, footer, or `<main>`; heroes need enough top
   padding to clear the fixed nav (originals use 140-160px).
 - Route folders - `/` (home `page.tsx`), `/about`, `/results`, `/book`,
