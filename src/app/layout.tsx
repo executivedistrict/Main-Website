@@ -26,6 +26,12 @@ export const metadata: Metadata = {
     template: "%s | Executive District",
   },
   icons: { icon: "/images/favicon-32.png" },
+  // Deploy marker (values inlined in next.config.ts). View source on the live
+  // site and compare build-commit with the merge commit on main.
+  other: {
+    "build-commit": process.env.BUILD_COMMIT ?? "unknown",
+    "build-time": process.env.BUILD_TIME ?? "unknown",
+  },
 };
 
 export default function RootLayout({
